@@ -16,13 +16,9 @@ let warningTimeout;
   Global variable constants
 */
 
-const MAX_GAME_NUMBER = 3398;
-const savedState = JSON.parse(localStorage.getItem("state")) || {};
-const gameNumber = savedState.gameNumber >= 0 ? savedState.gameNumber : getRandomGameNumber();
-
-function getRandomGameNumber() {
-  return Math.floor(Math.random() * (MAX_GAME_NUMBER + 1));
-}
+//The day Costcodle was launched. Used to find game number each day
+const costcodleStartDate = new Date("09/21/2023");
+const gameNumber = getGameNumber();
 
 //Elements with event listeners to play the game
 const input = document.getElementById("guess-input");
@@ -57,39 +53,8 @@ const gameState = JSON.parse(localStorage.getItem("state")) || {
 playGame();
 
 function playGame() {
-  fetch("./games.json")
-    .then((response) => response.json())
-    .then((json) => {
-      const allKeys = Object.keys(json);
-      const randomKey = getRandomGameKey(allKeys);
-
-      const savedState = JSON.parse(localStorage.getItem("state")) || {};
-
-      // If the user already has a game in progress, use it
-      const selectedGameKey = savedState.gameKey || randomKey;
-      const product = json[selectedGameKey];
-
-      // Set product details
-      productName = product.name;
-      productPrice = Number(product.price.slice(1));
-      productImage = product.image;
-
-      // Update global game state
-      gameNumber = selectedGameKey; // now using key like "game-23"
-      if (savedState.gameKey !== selectedGameKey) {
-        gameState.gameNumber = selectedGameKey;
-        localStorage.setItem("state", JSON.stringify(gameState));
-      }
-
-      initializeGame();
-    });
+  fetchGameData(getGameNumber());
 }
-
-function getRandomGameKey(keysArray) {
-  const index = Math.floor(Math.random() * keysArray.length);
-  return keysArray[index];
-}
-
 
 /*
   Acquiring Game Data
@@ -237,7 +202,7 @@ function handleInput() {
 }
 
 function copyStats() {
-  let output = `Costcodle #${gameNumber.replace("game-", "")}`;
+  let output = `Costcodle #${gameNumber}`;
   if (!gameState.hasWon) {
     output += ` X/6\n`;
   } else {
