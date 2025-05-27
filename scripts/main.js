@@ -506,12 +506,9 @@ function shakeBox() {
 */
 
 function getGameNumber() {
-  const maxNum = 3398;
+  const currDate = new Date();
+  let timeDifference = currDate.getTime() - costcodleStartDate.getTime();
+  let dayDifference = timeDifference / (1000 * 3600 * 24);
 
-  const randomNum = Math.ceil(Math.random() * maxNum;
-  //const currDate = new Date();
-  //let timeDifference = currDate.getTime() - costcodleStartDate.getTime();
-  //let dayDifference = timeDifference / (1000 * 3600 * 24);
-
-  return randomNum;
+  return Math.ceil(dayDifference);
 }
