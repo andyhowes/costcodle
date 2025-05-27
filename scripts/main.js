@@ -16,9 +16,13 @@ let warningTimeout;
   Global variable constants
 */
 
-//The day Costcodle was launched. Used to find game number each day
-const costcodleStartDate = new Date("09/21/2023");
-const gameNumber = getGameNumber();
+const MAX_GAME_NUMBER = 3398;
+const savedState = JSON.parse(localStorage.getItem("state")) || {};
+const gameNumber = savedState.gameNumber >= 0 ? savedState.gameNumber : getRandomGameNumber();
+
+function getRandomGameNumber() {
+  return Math.floor(Math.random() * (MAX_GAME_NUMBER + 1));
+}
 
 //Elements with event listeners to play the game
 const input = document.getElementById("guess-input");
