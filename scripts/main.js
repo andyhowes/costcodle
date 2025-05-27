@@ -18,7 +18,7 @@ let warningTimeout;
 
 //The day Costcodle was launched. Used to find game number each day
 const costcodleStartDate = new Date("09/21/2023");
-const gameNumber = getGameNumber();
+const gameNumber = Math.floor(Math.random() * 3399);
 
 //Elements with event listeners to play the game
 const input = document.getElementById("guess-input");
