@@ -18,8 +18,8 @@ let warningTimeout;
 
 //The day Costcodle was launched. Used to find game number each day
 const costcodleStartDate = new Date("09/21/2023");
-const gameNumber = Math.floor(Math.random() * 3399);
-
+const gameNumber = Math.ceil(Math.random() * 3399 );
+console.log(gameNumber);
 //Elements with event listeners to play the game
 const input = document.getElementById("guess-input");
 const buttonInput = document.getElementById("guess-button");
@@ -53,7 +53,7 @@ const gameState = JSON.parse(localStorage.getItem("state")) || {
 playGame();
 
 function playGame() {
-  fetchGameData(getGameNumber());
+  fetchGameData(gameNumber);
 }
 
 /*
@@ -381,7 +381,7 @@ function calculatePercent(guess) {
   return ((guess * 100) / (productPrice * 100)) * 100 - 100;
 }
 
-/* 
+/*
   End state function to handle win/loss conditions
 */
 
