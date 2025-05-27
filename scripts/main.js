@@ -57,8 +57,39 @@ const gameState = JSON.parse(localStorage.getItem("state")) || {
 playGame();
 
 function playGame() {
-  fetchGameData(getGameNumber());
+  fetch("./games.json")
+    .then((response) => response.json())
+    .then((json) => {
+      const allKeys = Object.keys(json);
+      const randomKey = getRandomGameKey(allKeys);
+
+      const savedState = JSON.parse(localStorage.getItem("state")) || {};
+
+      // If the user already has a game in progress, use it
+      const selectedGameKey = savedState.gameKey || randomKey;
+      const product = json[selectedGameKey];
+
+      // Set product details
+      productName = product.name;
+      productPrice = Number(product.price.slice(1));
+      productImage = product.image;
+
+      // Update global game state
+      gameNumber = selectedGameKey; // now using key like "game-23"
+      if (savedState.gameKey !== selectedGameKey) {
+        gameState.gameNumber = selectedGameKey;
+        localStorage.setItem("state", JSON.stringify(gameState));
+      }
+
+      initializeGame();
+    });
 }
+
+function getRandomGameKey(keysArray) {
+  const index = Math.floor(Math.random() * keysArray.length);
+  return keysArray[index];
+}
+
 
 /*
   Acquiring Game Data
@@ -206,7 +237,7 @@ function handleInput() {
 }
 
 function copyStats() {
-  let output = `Costcodle #${gameNumber}`;
+  let output = `Costcodle #${gameNumber.replace("game-", "")}`;
   if (!gameState.hasWon) {
     output += ` X/6\n`;
   } else {
